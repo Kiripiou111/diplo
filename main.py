@@ -4,7 +4,7 @@ import discord
 from json import loads
 from asyncio import sleep
 import os
-
+from keep_alive import keep_alive
 
 #Variables Bot :
 TOKEN = os.eviron.get("token")
@@ -180,3 +180,4 @@ async def on_message(message: discord.Message):
                     
                     
 client.run(TOKEN)
+keep_alive()
