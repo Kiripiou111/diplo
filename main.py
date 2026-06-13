@@ -141,7 +141,6 @@ async def on_message(message: discord.Message):
             print(message.channel)
             msg = str(date()) + str(LaTotale()+ "\n .")
             await message.channel.send(msg)
-            await 1202301779555913849.send
             await message.delete()
             
     elif message.content == "eventss":
