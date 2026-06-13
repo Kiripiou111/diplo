@@ -3,10 +3,12 @@ import requests
 import discord
 from json import loads
 from asyncio import sleep
+import os
 
 
 #Variables Bot :
-TOKEN = "MTE5MDYwODI3NzU5MjA4ODU3Ng.GeRzSO.m6YFiTSb47YRFo5n80YY_UeljSNVDBuOoY5B9s"
+TOKEN = os.eviron.get("token")
+
 
 intents = discord.Intents.default()
 intents.presences = True
@@ -139,6 +141,7 @@ async def on_message(message: discord.Message):
             print(message.channel)
             msg = str(date()) + str(LaTotale()+ "\n .")
             await message.channel.send(msg)
+            await 1202301779555913849.send
             await message.delete()
             
     elif message.content == "eventss":
@@ -157,6 +160,11 @@ async def on_message(message: discord.Message):
             
     elif message.content == "date" and message.author.id in admin_liste:
         await message.channel.send(date())
+        await message.delete()
+    
+    elif message.content == "events_late" and message.author.id in admin_liste:
+        msg = str(date() + "rien a signaler pour cette campagne."+ "\n .")
+        await message.channel.send(msg)
         await message.delete()
     
     elif message.content.startswith("change date ") and message.author.id in admin_liste:
