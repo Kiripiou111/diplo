@@ -23,18 +23,18 @@ admin_liste = [922077625583804426, 567122368686981133, 697918875500544091, 70511
 
 #Mes fonctions INTERNES:
 def getdate():
-    global n_campagne
     try:
         with open("dates.txt", "r") as f:
             lignes = f.readlines()
 
         if len(lignes) > 0:
-            n_campagne = int(lignes[-1].strip())
+            d= int(lignes[-1].strip())
         else:
-            n_campagne = 0
+            d = 0
 
     except FileNotFoundError:
-        n_campagne = 0
+        d = 0
+    return d
 def newdate(d):
     with open("dates.txt", "a") as f:
         f.write(str(d) + "\n")
