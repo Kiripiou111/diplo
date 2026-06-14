@@ -21,6 +21,40 @@ channel_name = "suggestions-v2-diplomacy"
 
 admin_liste = [922077625583804426, 567122368686981133, 697918875500544091, 705115312986521681, 1192918958144241706, 1233458488332648501, 115486361833701383, 1015328595155099738, 778651161989087292]
 
+#Mes fonctions INTERNES:
+def getdate():
+    global n_campagne
+    try:
+        with open("dates.txt", "r") as f:
+            lignes = f.readlines()
+
+        if len(lignes) > 0:
+            n_campagne = int(lignes[-1].strip())
+        else:
+            n_campagne = 0
+
+    except FileNotFoundError:
+        n_campagne = 0
+def newdate(d):
+    with open("dates.txt", "a") as f:
+        f.write(str(d) + "\n")
+def pickNoArsenal():
+    n = 0
+    while n == 0:
+        chosen_one = regions_terrestre[randint(0, len(regions_terrestre)-1)]
+        if chosen_one not in arsenaux:
+            n = 1
+    return chosen_one 
+def formatage(path_file): 
+    obfi = open(path_file, "r")
+    while 1:
+        line = obfi.readline()
+        if line == '':
+            break
+        line = line.replace('\n', '')
+        line = '"' + line + '"' + ","
+        print(line, end='')
+
 #Variables programme : SP
 stat_limite = 15
 pays = ["Etats-Unis (Ouest)", "Inde", "Argentine", "Afrique du Sud", "Russie (Est)", "Etats-Unis (Est)", "France", "Australie", "Canada", "Russie (Ouest)", "Arabie", "Antarctique", " Vénezuela", "Brésil", "Congo", "Mali", "Egypte", "Chine"]
@@ -32,26 +66,9 @@ extremes = ['Ris', 'Amu', 'Bel', 'Sco', 'Rii', 'Cos', 'Sin', 'MaS', 'UrS', 'Arc'
 regions = ['Haw', 'Yuk', 'Alb', 'Sas', 'Ont', 'Ne', 'Thu', 'Tex', 'Mon', 'Cu', 'Pa', 'Guy', 'Ama', 'Pé', 'SaP', 'Men', 'MBL', 'Ape', 'Nov', 'ND', 'Dud', 'Len', 'Ris', 'Sau', 'Nsw', 'NTe', 'PH', 'VI', 'BU', 'KO', 'HE', 'VLC', 'KAM', 'IM', 'QI', 'TI', 'WC', 'PA', 'KY', 'OM', 'KA', 'IR', 'BS', 'PO', 'BA', 'AH', 'SP', 'Alg', 'Mau', 'Ni', 'Nge', 'CAR', 'SuS', 'Som', 'Ang', 'Zam', 'Bot', 'Mad', 'NT', 'Qu', 'NwF', 'Bri', 'Paw', 'Clf', 'Un', 'FL', 'DP', 'Ve', 'Col', 'Eq', 'Sa', 'Bho', 'Rio', 'AN', 'AL', 'FR', 'StP', 'MO', 'BE', 'Sy', 'Iq', 'SAr', 'Ly', 'Eg', 'Sa', 'Mal', 'Gh', 'Gui', 'Zai', 'Tan', 'Nen', 'Chi', 'Arg', 'Bua', 'Nam', 'SuA', 'San', 'Maw', 'Vos', 'Cat', 'WA', 'Vic', 'Qsl', 'MU', 'CA', 'DE', 'GU', 'SH', 'BEI', 'MON', 'IRK', 'YA', 'God', 'Ala', 'Man', 'Gl', 'MdW', 'Mex', 'Gal', 'Ama', 'Bra', 'Re', 'Bol', 'Ur', 'Bat', 'PS', 'Syo', 'Zim', 'Moz', 'Con', 'Ug', 'Cam', 'Et', 'Cha', 'Ma', 'It', 'SC', 'UK', 'TU', 'AR', 'WS', 'AF', 'ES', 'BA', 'TH', 'LA', 'VL', 'JA', 'IN', 'NZ', 'Ber', 'NPa', 'Pac', 'Pis', 'Amu', 'Arc', 'GoA', 'Esp', 'SuP', 'Bel', 'Sco', 'OuA', 'Cao', 'Car', 'GMe', 'SS', 'Lab', 'HuB', 'Nvn', 'Atm', 'GoG', 'EsA', 'Rii', 'Cos', 'Mch', 'Sin', 'Oin', 'MaS', 'Ein', 'UrS', 'Tas', 'Jav', 'Nin', 'Ara', 'Ben', 'Rou', 'SCh', 'Ech', 'Jap', 'Okh', 'Noi', 'Mdt', 'Cas', 'Nrd', 'Bar', 'Sib', 'BeS', 'BaS']
 an = 1900
 campagnes = ["Campagne de Printemps ", "Campagne d'automne "]
-n_campagne = 0
+n_campagne = getdate()
 
-#Mes fonctions :
-def pickNoArsenal():
-    n = 0
-    while n == 0:
-        chosen_one = regions_terrestre[randint(0, len(regions_terrestre)-1)]
-        if chosen_one not in arsenaux:
-            n = 1
-    return chosen_one
-    
-def formatage(path_file): 
-    obfi = open(path_file, "r")
-    while 1:
-        line = obfi.readline()
-        if line == '':
-            break
-        line = line.replace('\n', '')
-        line = '"' + line + '"' + ","
-        print(line, end='')
+# Mes fonctions EXTERNES
 def intro():
     txt = ""
     dico_actions_possibles = {"1" : Pb(), "2" : Miracle(), "3" : Propagande(), "4" : MerGelée(), "5" : SoutienPopulaire(), "6" : Blitzkrieg(), "7": enlisement(), "8": isolement(), "9" : Rebellion()}
@@ -99,7 +116,6 @@ def Propagande():
     lucky_charms = pays[randint(0, len(pays)-1)]
     retour = "Aux armes ! : La population de **" + str(region_cible) + "** a succombé a la propagande de " + str(lucky_charms) + " ! Elle s'est spontanément organisée pour former une armée de ce dernier !" + "\n"
     return retour
-
 def date():
     année = int(an + n_campagne/2)
     if n_campagne - 2*int(n_campagne/2) == 0:
@@ -109,7 +125,6 @@ def date():
     retour = str(campagne) + str(année) + ": " + "\n"
     print(retour)
     return retour
-
 def LaTotale():
     global n_campagne
     retour, liste_actions = '', []
@@ -120,19 +135,18 @@ def LaTotale():
         if i != None:
             retour = retour + " --> " + str(i)
     
-    n_campagne += 1 
+    n_campagne += 1
+    newdate(n_campagne)
+     
 
     if retour =='':
         retour = "rien a signaler pour cette campagne."
     return retour
-
 async def get_msg(channel: discord.TextChannel):
     return [message async for message in channel.history(limit=None)]
-
 @client.event
 async def on_ready():
-    print("connected")
-    
+    print("connected") 
 @client.event
 async def on_message(message: discord.Message):
     print(message.content)
@@ -170,6 +184,8 @@ async def on_message(message: discord.Message):
         global n_campagne
         try:       
             n_campagne = int(message.content.split("change date ")[-1])
+            newdate(n_campagne)
+
         except:
             await message.reply("Entrez un entier")
             return
