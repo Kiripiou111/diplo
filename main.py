@@ -7,7 +7,7 @@ import os
 from keep_alive import keep_alive
 
 #Variables Bot :
-TOKEN = os.eviron.get("token")
+TOKEN = os.environ.get("token")
 
 
 intents = discord.Intents.default()
