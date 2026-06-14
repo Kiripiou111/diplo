@@ -178,5 +178,5 @@ async def on_message(message: discord.Message):
         await message.delete()
                     
                     
-client.run(TOKEN)
 keep_alive()
+client.run(TOKEN)
