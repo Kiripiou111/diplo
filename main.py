@@ -5,10 +5,13 @@ from json import loads
 from asyncio import sleep
 import os
 from keep_alive import keep_alive
+from supabase import create_client, Client
 
 #Variables Bot :
 TOKEN = os.environ.get("token")
-
+url: str = os.environ.get("SUPABASE_URL")
+key: str = os.environ.get("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
 
 intents = discord.Intents.default()
 intents.presences = True
@@ -24,8 +27,10 @@ admin_liste = [922077625583804426, 567122368686981133, 697918875500544091, 70511
 #Mes fonctions INTERNES:
 def getdate():
     try:
-        with open("dates.txt", "r") as f:
-            lignes = f.readlines()
+        response = (
+        supabase.table("planets")
+        .select("*")
+        .execute())
 
         if len(lignes) > 0:
             d= int(lignes[-1].strip())
