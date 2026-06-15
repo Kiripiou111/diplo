@@ -36,10 +36,8 @@ def getdate():
         .execute())
         d = result.data[0]["valeur"]
         
-        else:
-            d = 0
 
-    except FileNotFoundError:
+    except:
         d = 0
     return d
 def newdate(d):
