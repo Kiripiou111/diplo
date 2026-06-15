@@ -9,8 +9,9 @@ from supabase import create_client, Client
 
 #Variables Bot :
 TOKEN = os.environ.get("token")
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
+
+url: str = os.environ.get("url")
+key: str = os.environ.get("key")
 supabase: Client = create_client(url, key)
 
 intents = discord.Intents.default()
@@ -27,13 +28,14 @@ admin_liste = [922077625583804426, 567122368686981133, 697918875500544091, 70511
 #Mes fonctions INTERNES:
 def getdate():
     try:
-        response = (
-        supabase.table("planets")
+        result = (
+        supabase.table("dates_log")
         .select("*")
+        .order("id", desc=True)
+        .limit(1)
         .execute())
-
-        if len(lignes) > 0:
-            d= int(lignes[-1].strip())
+        d = result.data[0]["valeur"]
+        
         else:
             d = 0
 
@@ -41,8 +43,10 @@ def getdate():
         d = 0
     return d
 def newdate(d):
-    with open("dates.txt", "a") as f:
-        f.write(str(d) + "\n")
+    result = (
+        supabase.table("dates_log")
+        .insert({"date": d})
+        .execute())
 def pickNoArsenal():
     n = 0
     while n == 0:
