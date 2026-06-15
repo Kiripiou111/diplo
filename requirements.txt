@@ -1,6 +1,6 @@
 discord==2.2.2
 requests==2.28.1
-psycopg2-binary
+supabase 2.91.0
 Werkzeug==3.0.0
 Jinja2==3.1.2
 Flask>=3.0.0
