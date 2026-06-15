@@ -170,7 +170,7 @@ async def on_message(message: discord.Message):
     
     elif message.content.startswith("clean ") and message.author.id in admin_liste:
         try:
-            n = int(message.content.split("clean ")[-1])
+            n = int(message.content.split("clean ")[-1]) +1
         except:
             await message.reply("Entrez un entier")
             return
