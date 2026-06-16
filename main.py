@@ -6,6 +6,8 @@ from asyncio import sleep
 import os
 from keep_alive import keep_alive
 from supabase import create_client, Client
+from utils import log_error
+
 
 #Variables Bot :
 TOKEN = os.environ.get("token")
@@ -26,13 +28,7 @@ channel_name = "suggestions-v2-diplomacy"
 admin_liste = [922077625583804426, 567122368686981133, 697918875500544091, 705115312986521681, 1192918958144241706, 1233458488332648501, 115486361833701383, 1015328595155099738, 778651161989087292]
 
 #Mes fonctions INTERNES:
-def log_error(e):
-    try:
-        supabase.table("logss").insert({
-            "error": str(e)
-        }).execute()
-    except Exception as err:
-        print(err)
+
 def getdate():
     try:
         result = (
@@ -188,10 +184,23 @@ def LaTotale():
     if retour =='':
         retour = "rien a signaler pour cette campagne."
     return retour
+
+
+
+async def heartbeat():
+    while True:
+        print("Bot vivant")
+        await sleep(60)
+
+@client.event
+async def on_ready():
+    print(f"Connecté en tant que {client.user}")
+    client.loop.create_task(heartbeat())
+    
 async def get_msg(channel: discord.TextChannel):
     return [message async for message in channel.history(limit=None)]
 @client.event
-async def on_ready():
+async def connect():
     print(f"Connecté en tant que {client.user}")
     log_error("connected")    
 

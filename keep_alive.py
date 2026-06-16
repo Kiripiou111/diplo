@@ -1,11 +1,13 @@
 from flask import Flask
 from threading import Thread
 import os
+from utils import log_error
 
 app = Flask('')
 
 @app.route('/')
 def home():
+    log_error("ping received")
     return "Bot is alive!"
 
 def run():
