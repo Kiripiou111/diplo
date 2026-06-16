@@ -60,6 +60,27 @@ def newdate(d):
 
     except Exception as e:
         log_error(f"newdate({d}) : {e}") 
+def delete_last_date():
+    try:
+        result = (
+            supabase.table("Diplo")
+            .select("id")
+            .order("id", desc=True)
+            .limit(1)
+            .execute()
+        )
+
+        if result.data:
+            last_id = result.data[0]["id"]
+
+            supabase.table("Diplo") \
+                .delete() \
+                .eq("id", last_id) \
+                .execute()
+
+
+    except Exception as e:
+        log_error(f"delete_last_date : {e}")
 def pickNoArsenal():
     n = 0
     while n == 0:
@@ -91,6 +112,15 @@ campagnes = ["Campagne de Printemps ", "Campagne d'automne "]
 n_campagne = getdate()
 
 # Mes fonctions EXTERNES
+def Nostalgie():
+    global n_campagne
+    date = getdate()
+    newdate(date-1)
+    n_campagne = date-1
+def regret():
+    global n_campagne
+    delete_last_date()
+    n_campagne = getdate()
 def intro():
     txt = ""
     dico_actions_possibles = {"1" : Pb(), "2" : Miracle(), "3" : Propagande(), "4" : MerGelée(), "5" : SoutienPopulaire(), "6" : Blitzkrieg(), "7": enlisement(), "8": isolement(), "9" : Rebellion()}
@@ -175,7 +205,7 @@ async def on_message(message: discord.Message):
     
     if message.content == "events" and message.author.id in admin_liste:
             print(message.channel)
-            msg = str(date()) + str(LaTotale()+ "\n .")
+            msg = str(date())+ ('(', str(n_campagne), ")") + str(LaTotale()+ "\n .")
             await message.channel.send(msg)
             await message.delete()
             
@@ -214,7 +244,13 @@ async def on_message(message: discord.Message):
     elif message.content == "intro" and message.author.id in admin_liste:
         await message.channel.send(intro())
         await message.delete()
-                    
-                    
+    elif message.content == "nostalgie!" and message.author.id in admin_liste:
+        Nostalgie()
+        
+    elif message.content == "regret!" and message.author.id in admin_liste:
+        regret()
+        messages = await get_msg(message.channel)
+        for x in range(2):
+            await messages[x].delete()          
 keep_alive()
 client.run(TOKEN)
