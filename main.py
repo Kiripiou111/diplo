@@ -29,22 +29,31 @@ admin_liste = [922077625583804426, 567122368686981133, 697918875500544091, 70511
 def getdate():
     try:
         result = (
-        supabase.table("dates_log")
-        .select("*")
-        .order("id", desc=True)
-        .limit(1)
-        .execute())
-        d = result.data[0]["valeur"]
-        
+            supabase.table("dates_log")
+            .select("valeur")
+            .order("id", desc=True)
+            .limit(1)
+            .execute()
+        )
 
-    except:
-        d = 0
-    return d
+        if result.data:
+            return int(result.data[0]["valeur"])
+
+        return 0
+
+    except Exception as e:
+        print("Erreur getdate :", e)
+        return 0
 def newdate(d):
-    result = (
-        supabase.table("dates_log")
-        .insert({"date": d})
-        .execute())
+    try:
+        result = (
+            supabase.table("dates_log").insert({"n": d}).execute()
+        )
+        return result
+
+    except Exception as e:
+        print("Erreur newdate :", e)    
+    
 def pickNoArsenal():
     n = 0
     while n == 0:
