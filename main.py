@@ -233,7 +233,6 @@ async def on_message(message: discord.Message):
         await message.delete()
     
     elif message.content.startswith("change date ") and message.author.id in admin_liste:
-        global n_campagne
         try:       
             n_campagne = int(message.content.split("change date ")[-1])
             newdate(n_campagne)
