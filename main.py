@@ -268,7 +268,4 @@ async def on_message(message: discord.Message):
                    
 if __name__ == "__main__":
     keep_alive()
-    client.run(
-        TOKEN,
-        reconnect=True
-    )
+    client.run(TOKEN)
