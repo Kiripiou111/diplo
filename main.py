@@ -7,6 +7,9 @@ import os
 from keep_alive import keep_alive
 from supabase import create_client, Client
 from utils import log_error
+import logging
+
+
 
 
 #Variables Bot :
@@ -268,4 +271,6 @@ async def on_message(message: discord.Message):
                    
 if __name__ == "__main__":
     keep_alive()
+    discord.utils.setup_logging(level=logging.INFO)
+    log_error(discord.__version__)
     client.run(TOKEN)

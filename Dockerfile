@@ -1,7 +1,10 @@
-FROM python:3.10-bullseye
-FROM gorialis/discord.py
-COPY requirements.txt /app/
+FROM python:3.10-slim
+
 WORKDIR /app
+
+COPY requirements.txt .
 RUN pip install -r requirements.txt
+
 COPY . .
-CMD ["python3", "main.py"]
+
+CMD ["python", "main.py"]
