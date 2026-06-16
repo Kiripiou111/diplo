@@ -202,10 +202,6 @@ async def on_ready():
     
 async def get_msg(channel: discord.TextChannel):
     return [message async for message in channel.history(limit=None)]
-@client.event
-async def connect():
-    print(f"Connecté en tant que {client.user}")
-    log_error("connected")    
 
 @client.event
 async def on_disconnect():
