@@ -31,8 +31,8 @@ def log_error(e):
         supabase.table("logss").insert({
             "error": str(e)
         }).execute()
-    except Exception as log_e:
-        print("Impossible d'écrire dans les logs :", log_e)
+    except Exception as err:
+        print(err)
 def getdate():
     try:
         result = (
@@ -196,6 +196,15 @@ async def on_ready():
     log_error("connected")    
 
 @client.event
+async def on_disconnect():
+    print("Déconnecté de Discord")
+    log_error("Déconnecté")
+
+@client.event
+async def on_resumed():
+    print("Connexion reprise")
+    log_error("Connexion reprise")
+@client.event
 async def on_message(message: discord.Message):
     print(message.content)
     
@@ -246,8 +255,11 @@ async def on_message(message: discord.Message):
         regret()
         messages = await get_msg(message.channel)
         for x in range(2):
-            await messages[x].delete()          
-keep_alive()
-client.run(TOKEN)
-print("Démarrage du bot")
-log_error("Démarrage du bot")
+            await messages[x].delete()   
+                   
+if __name__ == "__main__":
+    keep_alive()
+    client.run(
+        TOKEN,
+        reconnect=True
+    )
