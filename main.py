@@ -205,7 +205,7 @@ async def on_message(message: discord.Message):
     
     if message.content == "events" and message.author.id in admin_liste:
             print(message.channel)
-            msg = str(date())+ ('(', str(n_campagne), ")") + str(LaTotale()+ "\n .")
+            msg = str(date())+ "("+ str(n_campagne)+")" + str(LaTotale()+ "\n .")
             await message.channel.send(msg)
             await message.delete()
             
