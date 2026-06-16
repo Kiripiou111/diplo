@@ -170,7 +170,7 @@ def date():
         campagne = campagnes[0]
     else:
         campagne = campagnes[1]
-    retour = str(campagne) + str(année) + ": " + "\n"
+    retour = str(campagne) + str(année) + ": "
     print(retour)
     return retour
 def LaTotale():
@@ -201,7 +201,7 @@ async def on_message(message: discord.Message):
     
     if message.content == "events" and message.author.id in admin_liste:
             print(message.channel)
-            msg = str(date())+ str(getdate()) + str(LaTotale())+ "\n ."
+            msg = str(date())+"("+ str(getdate()) + ") \n" + str(LaTotale())+ "\n ."
             await message.channel.send(msg)
             await message.delete()
             
