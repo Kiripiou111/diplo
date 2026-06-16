@@ -109,18 +109,13 @@ extremes = ['Ris', 'Amu', 'Bel', 'Sco', 'Rii', 'Cos', 'Sin', 'MaS', 'UrS', 'Arc'
 regions = ['Haw', 'Yuk', 'Alb', 'Sas', 'Ont', 'Ne', 'Thu', 'Tex', 'Mon', 'Cu', 'Pa', 'Guy', 'Ama', 'Pé', 'SaP', 'Men', 'MBL', 'Ape', 'Nov', 'ND', 'Dud', 'Len', 'Ris', 'Sau', 'Nsw', 'NTe', 'PH', 'VI', 'BU', 'KO', 'HE', 'VLC', 'KAM', 'IM', 'QI', 'TI', 'WC', 'PA', 'KY', 'OM', 'KA', 'IR', 'BS', 'PO', 'BA', 'AH', 'SP', 'Alg', 'Mau', 'Ni', 'Nge', 'CAR', 'SuS', 'Som', 'Ang', 'Zam', 'Bot', 'Mad', 'NT', 'Qu', 'NwF', 'Bri', 'Paw', 'Clf', 'Un', 'FL', 'DP', 'Ve', 'Col', 'Eq', 'Sa', 'Bho', 'Rio', 'AN', 'AL', 'FR', 'StP', 'MO', 'BE', 'Sy', 'Iq', 'SAr', 'Ly', 'Eg', 'Sa', 'Mal', 'Gh', 'Gui', 'Zai', 'Tan', 'Nen', 'Chi', 'Arg', 'Bua', 'Nam', 'SuA', 'San', 'Maw', 'Vos', 'Cat', 'WA', 'Vic', 'Qsl', 'MU', 'CA', 'DE', 'GU', 'SH', 'BEI', 'MON', 'IRK', 'YA', 'God', 'Ala', 'Man', 'Gl', 'MdW', 'Mex', 'Gal', 'Ama', 'Bra', 'Re', 'Bol', 'Ur', 'Bat', 'PS', 'Syo', 'Zim', 'Moz', 'Con', 'Ug', 'Cam', 'Et', 'Cha', 'Ma', 'It', 'SC', 'UK', 'TU', 'AR', 'WS', 'AF', 'ES', 'BA', 'TH', 'LA', 'VL', 'JA', 'IN', 'NZ', 'Ber', 'NPa', 'Pac', 'Pis', 'Amu', 'Arc', 'GoA', 'Esp', 'SuP', 'Bel', 'Sco', 'OuA', 'Cao', 'Car', 'GMe', 'SS', 'Lab', 'HuB', 'Nvn', 'Atm', 'GoG', 'EsA', 'Rii', 'Cos', 'Mch', 'Sin', 'Oin', 'MaS', 'Ein', 'UrS', 'Tas', 'Jav', 'Nin', 'Ara', 'Ben', 'Rou', 'SCh', 'Ech', 'Jap', 'Okh', 'Noi', 'Mdt', 'Cas', 'Nrd', 'Bar', 'Sib', 'BeS', 'BaS']
 an = 1900
 campagnes = ["Campagne de Printemps ", "Campagne d'automne "]
-n_campagne = getdate()
 
 # Mes fonctions EXTERNES
 def Nostalgie():
-    global n_campagne
     date = getdate()
     newdate(date-1)
-    n_campagne = date-1
 def regret():
-    global n_campagne
     delete_last_date()
-    n_campagne = getdate()
 def intro():
     txt = ""
     dico_actions_possibles = {"1" : Pb(), "2" : Miracle(), "3" : Propagande(), "4" : MerGelée(), "5" : SoutienPopulaire(), "6" : Blitzkrieg(), "7": enlisement(), "8": isolement(), "9" : Rebellion()}
@@ -169,8 +164,9 @@ def Propagande():
     retour = "Aux armes ! : La population de **" + str(region_cible) + "** a succombé a la propagande de " + str(lucky_charms) + " ! Elle s'est spontanément organisée pour former une armée de ce dernier !" + "\n"
     return retour
 def date():
-    année = int(an + n_campagne/2)
-    if n_campagne - 2*int(n_campagne/2) == 0:
+    n_camp = getdate()
+    année = int(an + n_camp/2)
+    if n_camp%2 == 0:
         campagne = campagnes[0]
     else:
         campagne = campagnes[1]
@@ -178,7 +174,6 @@ def date():
     print(retour)
     return retour
 def LaTotale():
-    global n_campagne
     retour, liste_actions = '', []
     for i in range(randint(2, 5)):
         dico_actions_possibles = {"1" : Pb(), "2" : Miracle(), "3" : Propagande(), "4" : MerGelée(), "5" : SoutienPopulaire(), "6" : None, "7": enlisement(), "8": isolement(), "9" : Rebellion(),"10":Blitzkrieg()}
@@ -187,8 +182,7 @@ def LaTotale():
         if i != None:
             retour = retour + " --> " + str(i)
     
-    n_campagne += 1
-    newdate(n_campagne)
+    newdate(getdate()+1)
      
 
     if retour =='':
@@ -207,7 +201,7 @@ async def on_message(message: discord.Message):
     
     if message.content == "events" and message.author.id in admin_liste:
             print(message.channel)
-            msg = str(date())+ "("+ str(n_campagne)+")" + str(LaTotale()+ "\n .")
+            msg = str(date())+ str(getdate()) + str(LaTotale())+ "\n ."
             await message.channel.send(msg)
             await message.delete()
             
@@ -236,8 +230,8 @@ async def on_message(message: discord.Message):
     
     elif message.content.startswith("change date ") and message.author.id in admin_liste:
         try:       
-            n_campagne = int(message.content.split("change date ")[-1])
-            newdate(n_campagne)
+            new_date = int(message.content.split("change date ")[-1])
+            newdate(new_date)
 
         except:
             await message.reply("Entrez un entier")
