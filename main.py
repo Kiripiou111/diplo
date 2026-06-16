@@ -26,34 +26,40 @@ channel_name = "suggestions-v2-diplomacy"
 admin_liste = [922077625583804426, 567122368686981133, 697918875500544091, 705115312986521681, 1192918958144241706, 1233458488332648501, 115486361833701383, 1015328595155099738, 778651161989087292]
 
 #Mes fonctions INTERNES:
+def log_error(e):
+    try:
+        supabase.table("logss").insert({
+            "error": str(e)
+        }).execute()
+    except Exception as log_e:
+        print("Impossible d'écrire dans les logs :", log_e)
 def getdate():
     try:
         result = (
-            supabase.table("dates_log")
-            .select("valeur")
-            .order("id", desc=True)
-            .limit(1)
-            .execute()
+        supabase.table("Diplo")
+        .select("n")
+        .order("id", desc=True)
+        .limit(1)
+        .execute()
         )
 
         if result.data:
-            return int(result.data[0]["valeur"])
+           return int(result.data[0]["n"])
 
         return 0
 
     except Exception as e:
-        print("Erreur getdate :", e)
-        return 0
+        log_error(f"getdate : {e}")
+        return  0 
 def newdate(d):
     try:
         result = (
-            supabase.table("dates_log").insert({"n": d}).execute()
+            supabase.table("Diplo").insert({"n": d}).execute()
         )
         return result
 
     except Exception as e:
-        print("Erreur newdate :", e)    
-    
+        log_error(f"newdate({d}) : {e}") 
 def pickNoArsenal():
     n = 0
     while n == 0:
