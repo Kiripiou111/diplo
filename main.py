@@ -198,7 +198,9 @@ async def get_msg(channel: discord.TextChannel):
     return [message async for message in channel.history(limit=None)]
 @client.event
 async def on_ready():
-    print("connected") 
+    print(f"Connecté en tant que {client.user}")
+    log_error("connected")    
+
 @client.event
 async def on_message(message: discord.Message):
     print(message.content)
@@ -253,3 +255,5 @@ async def on_message(message: discord.Message):
             await messages[x].delete()          
 keep_alive()
 client.run(TOKEN)
+print("Démarrage du bot")
+log_error("Démarrage du bot")
